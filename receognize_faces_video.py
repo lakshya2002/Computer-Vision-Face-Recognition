@@ -5,6 +5,8 @@ import imutils
 import pickle
 import time
 import cv2
+from datetime import datetime
+import csv
 
 '''construct the argument parser and parse the arguments'''
 # ap = argparse.ArgumentParser()
@@ -31,6 +33,15 @@ vs = VideoStream(src=0).start()
 writer = None
 time.sleep(2.0)
 
+now = datetime.now()
+current_date = now.strftime("%Y-%m-%d")
+
+f = open(current_date+'.csv','w+',newline='')
+fields = ['name', 'time'] 
+
+lnwriter = csv.writer(f)
+lnwriter.writerow(fields) 
+
 while True:
     frame = vs.read()
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -54,6 +65,8 @@ while True:
                 counts[name] = counts.get(name, 0)+1  
             name = max(counts, key =counts.get)    
         names.append(name)
+        current_time = now.strftime("%H-%M-%S") 
+        lnwriter.writerow([name,current_time]) 
 
 
     
